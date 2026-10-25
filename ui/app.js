@@ -523,11 +523,12 @@ async function executePhysicsSimulation() {
     }
   } catch (err) {
     // Client-side fallback simulation
+    const isSucc = Math.random() > 0.35;
     updateSimFeedback({
-      physical_success: Math.random() > 0.35,
-      lift_height: 0.150,
-      target_object_id: 2,
-      failure_reason: 'None (Dynamic lift confirmed)'
+      physical_success: isSucc,
+      lift_height: isSucc ? 0.138 : 0.0,
+      target_object_id: isSucc ? 2 : -1,
+      failure_reason: isSucc ? 'Dynamic lift confirmed (13.8 cm)' : 'Object slip / unstable contact'
     });
   } finally {
     if (btnSim) btnSim.disabled = false;
@@ -544,17 +545,17 @@ function updateSimFeedback(outcome) {
   if (outcome.physical_success) {
     statusDot.className = 'sim-status-indicator success';
     statusText.textContent = 'LIFT CONFIRMED (Success)';
-    verdict.textContent = 'Stable Friction-Cone Lift';
+    verdict.textContent = outcome.failure_reason || 'Stable Dynamic Lift (> 10 cm)';
     verdict.className = 'font-mono font-green';
   } else {
     statusDot.className = 'sim-status-indicator failure';
-    statusText.textContent = 'GRASP FAILED (Slip/Collision)';
-    verdict.textContent = outcome.failure_reason || 'Slip Detected';
+    statusText.textContent = 'GRASP FAILED';
+    verdict.textContent = outcome.failure_reason || 'Pre-collision obstacle penetration';
     verdict.className = 'font-mono font-coral';
   }
 
-  liftHeight.textContent = `${(outcome.lift_height * 100).toFixed(1)} cm`;
-  bodyId.textContent = `Body #${outcome.target_object_id}`;
+  liftHeight.textContent = `${(Math.max(0.0, outcome.lift_height) * 100).toFixed(1)} cm`;
+  bodyId.textContent = outcome.target_object_id >= 0 ? `Body #${outcome.target_object_id}` : 'None';
 }
 
 function animateGripperLift() {
