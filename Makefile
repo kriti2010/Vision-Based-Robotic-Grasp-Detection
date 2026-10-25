@@ -26,5 +26,8 @@ analyze:
 demo:
 	streamlit run demo/app.py
 
+ui:
+	$(PYTHON) ui/server.py 8080
+
 clean:
 	rm -rf data/ checkpoints/ results/ .pytest_cache/

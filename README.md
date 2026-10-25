@@ -160,9 +160,23 @@ The mean test loss remains well below $\alpha = 0.10$ across all models, proving
 
 ---
 
-## 6. Interactive Demo
-To run the web interface:
+## 6. Interactive User Interfaces
+
+### A. 3D Web Studio (Recommended)
+A rich WebGL 3D interface featuring real-time PyTorch diffusion sampling, calibrated scoring, conformal risk control ($\alpha$ slider), physical PyBullet dynamic lift execution, and interactive benchmark dashboards.
+
 ```bash
+# Launch on http://localhost:8080
+make ui
+# Or directly:
+python ui/server.py 8080
+```
+
+### B. Streamlit Demo
+```bash
+make demo
+# Or directly:
 streamlit run demo/app.py
 ```
 Allows testing any scene seed, inspecting 3D point clouds and sampled grasps, adjusting $\alpha$, and executing physical grasping trials in real time.
+

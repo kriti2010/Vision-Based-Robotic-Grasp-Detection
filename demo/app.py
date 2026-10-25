@@ -50,13 +50,20 @@ def load_models():
     gen_path = os.path.join(PROJECT_ROOT, "checkpoints", "generator_base.pt")
     scorer_path = os.path.join(PROJECT_ROOT, "checkpoints", "scorer_base.pt")
 
-    gen = GraspDiffusionDenoiser(global_dim=64, local_dim=32, hidden_dim=64).to(device)
-    scorer = GraspSuccessScorer(global_dim=64, local_dim=32, hidden_dim=64).to(device)
-
-    if os.path.exists(gen_path):
-        gen.load_state_dict(torch.load(gen_path, map_location=device))
-    if os.path.exists(scorer_path):
-        scorer.load_state_dict(torch.load(scorer_path, map_location=device))
+    try:
+        gen = GraspDiffusionDenoiser().to(device)
+        scorer = GraspSuccessScorer().to(device)
+        if os.path.exists(gen_path):
+            gen.load_state_dict(torch.load(gen_path, map_location=device))
+        if os.path.exists(scorer_path):
+            scorer.load_state_dict(torch.load(scorer_path, map_location=device))
+    except Exception:
+        gen = GraspDiffusionDenoiser(global_dim=64, local_dim=32, hidden_dim=64).to(device)
+        scorer = GraspSuccessScorer(global_dim=64, local_dim=32, hidden_dim=64).to(device)
+        if os.path.exists(gen_path):
+            gen.load_state_dict(torch.load(gen_path, map_location=device))
+        if os.path.exists(scorer_path):
+            scorer.load_state_dict(torch.load(scorer_path, map_location=device))
 
     gen.eval()
     scorer.eval()
