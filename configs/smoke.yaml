@@ -1,0 +1,40 @@
+# Smoke configuration for rapid CPU testing (< 3 minutes)
+mode: "smoke"
+device: "cpu"
+
+data:
+  base_scenes: 5
+  base_seed_start: 0
+  antipodal_per_scene: 24
+  perturbed_per_scene: 24
+  data_dir: "data/smoke"
+
+train:
+  batch_size: 16
+  base_steps: 200
+  lr: 0.0003
+  device: "cpu"
+
+rounds:
+  round1_scenes: 5
+  round1_seed_start: 600000
+  round1_steps: 200
+  round2_scenes: 10
+  round2_seed_start: 700000
+  round2_steps: 200
+
+episodes:
+  views_T: 4
+  samples_N: 32
+  steps_K: 12
+  fusion_episodes: 20
+  calib_episodes: 20
+  test_episodes: 20
+  fusion_seed_start: 100000
+  calib_seed_start: 200000
+  test_seed_start: 300000
+
+risk:
+  alphas: [0.05, 0.10, 0.20]
+  num_lambdas: 201
+  bound_check_resplits: 50

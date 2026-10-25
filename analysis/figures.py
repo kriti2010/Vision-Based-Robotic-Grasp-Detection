@@ -44,8 +44,8 @@ def plot_pipeline_diagram(output_path: str = "results/figures/pipeline_diagram.p
     # Bottom Decision Policy Block
     decision_box = (
         "5. Conformal Risk-Controlled Policy (Execute / Re-View / Abstain)\n"
-        r"At each view $t \in [1, T]$: predict risk $\rho$. If $\rho \le \hat{\lambda}(\alpha)$, execute grasp." + "\n"
-        r"If $\rho > \hat{\lambda}(\alpha)$, capture next viewpoint. If $t = T$ and $\rho > \hat{\lambda}$, abstain."
+        "At each view t: predict risk rho. If rho <= lambda(alpha), execute grasp.\n"
+        "If rho > lambda(alpha), capture next viewpoint. If t = T and rho > lambda, abstain."
     )
     ax.text(
         0.50, 0.20, decision_box,

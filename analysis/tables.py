@@ -73,6 +73,8 @@ def compute_auroc_table(
     for b in range(n_bootstrap):
         boot_idx = rng.choice(N_episodes, size=N_episodes, replace=True)
         y_boot = y_true[boot_idx].flatten()
+        if len(np.unique(y_boot)) < 2:
+            continue
 
         auc_score_only = 0.5
         for m in models:
