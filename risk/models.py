@@ -18,8 +18,8 @@ class RiskModelSuite:
 
     def __init__(self):
         self.models = {
-            "score_only": LogisticRegression(penalty=None, solver="lbfgs"),
-            "dispersion": LogisticRegression(penalty=None, solver="lbfgs"),
+            "score_only": LogisticRegression(solver="lbfgs"),
+            "dispersion": LogisticRegression(solver="lbfgs"),
             "cross_view": GradientBoostingClassifier(n_estimators=50, max_depth=3, random_state=42),
             "all_features": GradientBoostingClassifier(n_estimators=50, max_depth=3, random_state=42),
         }

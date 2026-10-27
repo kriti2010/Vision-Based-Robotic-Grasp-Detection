@@ -147,8 +147,11 @@ class ClutteredScene:
         return res
 
     def close(self):
-        if p.isConnected(physicsClientId=self.client):
-            p.disconnect(physicsClientId=self.client)
+        if self.client >= 0:
+            cid = self.client
+            self.client = -1
+            if p.isConnected(physicsClientId=cid):
+                p.disconnect(physicsClientId=cid)
 
     def __del__(self):
         try:

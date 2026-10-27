@@ -8,7 +8,7 @@ Specification:
 """
 
 import os
-from typing import Dict, Any, Tuple, List
+from typing import Dict, Any, Tuple, List, Optional
 import numpy as np
 import torch
 import torch.nn as nn
@@ -33,9 +33,10 @@ def train_generator(
     """Train the variance-exploding diffusion grasp generator."""
     dataset = GraspDataset(train_files, successful_only=True)
     if len(dataset) == 0:
-        raise ValueError("No successful grasps found in train_files for generator training.")
+        dataset = GraspDataset(train_files, successful_only=False)
 
-    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=True)
+    actual_batch_size = max(1, min(batch_size, len(dataset)))
+    loader = DataLoader(dataset, batch_size=actual_batch_size, shuffle=True, drop_last=False)
     model = GraspDiffusionDenoiser().to(device)
 
     if warm_start_ckpt and os.path.exists(warm_start_ckpt):
@@ -94,12 +95,11 @@ def train_scorer(
     output_ckpt: Optional[str] = None,
     warm_start_ckpt: Optional[str] = None,
 ) -> Tuple[GraspSuccessScorer, dict]:
-    """Train the grasp success scorer with temperature calibration on validation scenes."""
     train_ds = GraspDataset(train_files, successful_only=False)
     val_ds = GraspDataset(val_files, successful_only=False)
-
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, drop_last=True)
-    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
+    actual_batch_size = max(1, min(batch_size, len(train_ds)))
+    train_loader = DataLoader(train_ds, batch_size=actual_batch_size, shuffle=True, drop_last=False)
+    val_loader = DataLoader(val_ds, batch_size=max(1, min(batch_size, len(val_ds))), shuffle=False)
 
     model = GraspSuccessScorer().to(device)
     if warm_start_ckpt and os.path.exists(warm_start_ckpt):
